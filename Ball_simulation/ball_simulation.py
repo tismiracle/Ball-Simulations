@@ -10,6 +10,7 @@ screen_height = 500
 
 
 pointA = {"x": 100, "y": 100, "old_x": 95, "old_y": 90}
+pointB = {"x": 200, "y": 100, "old_x": 95, "old_y": 90}
 radius = 10
 
 bounce = 0.8
@@ -103,6 +104,8 @@ while running:
     elif pointA["y"] < radius:
         pointA["y"] = radius
         pointA["old_y"] = pointA["y"] + vy * bounce
+
+    print(pointA)
 
 
     pygame.draw.circle(screen, (255,235,23), (pointA["x"], pointA["y"]), radius)

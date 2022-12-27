@@ -1,0 +1,180 @@
+
+from math import radians
+import pygame
+
+
+
+screen_width = 500
+screen_height = 500
+
+
+
+pointA = {"x": 100, "y": 100, "old_x": 95, "old_y": 90}
+radius = 10
+
+bounce = 0.8
+friction = 0.99
+
+
+
+pygame.init()
+FPS = 60 # frames per second setting
+fpsClock = pygame.time.Clock()
+screen = pygame.display.set_mode([screen_width, screen_height])
+
+
+def if_clicked_on_ball(mouse_pos, mouse_click, ball_pos, ball_radius):
+
+    if mouse_click[0]:
+        if mouse_pos[0] > ball_pos["x"] - ball_radius and mouse_pos[0] < ball_pos["x"] + ball_radius:
+        # print("clicked on x axis of ball")
+            
+            if mouse_pos[1] > ball_pos["y"] - ball_radius and mouse_pos[1] < ball_pos["y"] + ball_radius:
+                print("clicked on ball")
+                return True
+            else:
+                print("Not clicked")
+                return False
+        else:
+            print("Not clicked")
+            return False
+
+def draw_distance(ball_pos, mouse_pos):
+    pygame.draw.line(screen, (255, 255, 255), (ball_pos["x"], ball_pos["y"]), (mouse_pos[0], mouse_pos[1]))
+
+class Ball():
+    """
+    function order:
+    1. save_previous_position
+    2. move
+    3. update v
+    """
+    def __init__(self, x, y, vx, vy, ball_friction, radius, color = (255, 255, 255), old_x = 0, old_y = 0):
+        self.vx = vx
+        self.vy = vy
+        self.x = x
+        self.y = y
+        self.old_x = x
+        self.old_y = y
+        self.radius = radius
+        self.color = color
+        self.friction = ball_friction
+        self.bounce = 0.9
+
+    def save_previous_position(self):
+        # self.old_x = float(self.old_x)
+        # self.old_y = float(self.old_y)
+        self.old_x = self.x
+        self.old_y = self.y
+
+    def move(self):
+        self.x += self.vx * self.friction
+        self.y += self.vy * self.friction
+
+    def update_v(self):
+        self.vx = self.x - self.old_x
+        self.vy = self.y - self.old_y
+
+    def collision_line(self, surf):
+        pygame.draw.line(surf, (243,23,23), (self.x, self.y), (self.x + self.vx, self.y + self.vy), 3)
+
+    def check_if_out_of_borders(self, screen_width, screen_height):
+        if self.x >= screen_width - self.radius:
+            # self.vx *= self.bounce
+            self.x = self.old_x
+            self.vx *= -1 * self.bounce
+            
+            # self.x *= bounce
+            
+        elif self.x <= self.radius:
+            # self.vx *= self.bounce
+            self.x = self.old_x
+            self.vx *= -1 * self.bounce
+            
+            # self.x *= bounce
+            
+
+        if self.y >= screen_height - self.radius:
+            # self.vy *= self.bounce
+            self.y = self.old_y
+            self.vy *= -1 * self.bounce
+            
+            # self.y *= bounce
+            
+        elif self.y <= self.radius:
+            # self.vy *= self.bounce
+            self.y = self.old_y
+            self.vy *= -1 * self.bounce
+            
+            # self.y *= bounce
+            
+
+
+class Obstacle():
+    def __init__(self, x, y, width, length):
+        self.x = self.x
+        self.y = self.y
+
+
+
+
+
+
+mouse_pos = None
+ball_clicked = False
+running = True
+ball = Ball(100, 100, 40, 47, 1, 10)
+# ball2 = Ball(200, 100, 10, 2, 0.99, 10)
+while running:
+
+    # Did the user click the window close button?
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    
+    mouse_pos = pygame.mouse.get_pos()
+    mouse_click = pygame.mouse.get_pressed()
+    # mouse_pos = pygame.mouse.get_pos()
+    # ball_clicked = if_clicked_on_ball(mouse_pos, mouse_click, pointA, radius)
+    screen.fill((0, 0, 0))
+  
+    ball.save_previous_position()   
+    ball.move()  
+    ball.update_v() 
+    
+    
+
+    print(ball.vx, ball.vy, ball.x, ball.y, ball.old_x, ball.old_y, ball.radius, ball.color, ball.friction, ball.bounce)
+
+
+    ball.check_if_out_of_borders(screen_width, screen_height)
+
+
+    # ball2.save_previous_position()    
+    # ball2.move()
+    # ball2.update_v()
+    # Fill the background with white
+
+    pygame.draw.circle(screen, ball.color, (ball.x, ball.y), ball.radius)
+    # pygame.draw.circle(screen, ball2.color, (ball2.x, ball2.y), ball2.radius)
+    ball.collision_line(screen)
+    # ball2.collision_line(screen)
+    
+
+
+    # if_clicked = if_clicked_on_ball(mouse_pos, mouse_click, pointA, 5)
+
+
+        # clicked = vel[1]
+
+        
+        
+   # Flip the display
+    pygame.display.flip()
+    fpsClock.tick(FPS)
+
+pygame.quit()
+
+
+
