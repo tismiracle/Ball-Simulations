@@ -1,19 +1,12 @@
 
 from math import radians
 import pygame
+import random
 
 
 
 screen_width = 500
 screen_height = 500
-
-
-
-pointA = {"x": 100, "y": 100, "old_x": 95, "old_y": 90}
-radius = 10
-
-bounce = 0.8
-friction = 0.99
 
 
 
@@ -49,7 +42,11 @@ class Ball():
     2. move
     3. update v
     """
-    def __init__(self, x, y, vx, vy, ball_friction, radius, color = (255, 255, 255), old_x = 0, old_y = 0):
+    def __init__(self, x, y, vx, vy, ball_friction, bounce, radius, color = (255, 255, 255), old_x = 0, old_y = 0, gravity = 0):
+        """ gravity = 0 is no gravity
+        bounce is only 0-1 value
+        friction is only 0-1 value        
+        """
         self.vx = vx
         self.vy = vy
         self.x = x
@@ -59,17 +56,17 @@ class Ball():
         self.radius = radius
         self.color = color
         self.friction = ball_friction
-        self.bounce = 0.9
+        self.bounce = bounce
+        self.gravity = gravity
 
     def save_previous_position(self):
-        # self.old_x = float(self.old_x)
-        # self.old_y = float(self.old_y)
         self.old_x = self.x
         self.old_y = self.y
 
     def move(self):
         self.x += self.vx * self.friction
         self.y += self.vy * self.friction
+        self.y += self.gravity
 
     def update_v(self):
         self.vx = self.x - self.old_x
@@ -79,34 +76,30 @@ class Ball():
         pygame.draw.line(surf, (243,23,23), (self.x, self.y), (self.x + self.vx, self.y + self.vy), 3)
 
     def check_if_out_of_borders(self, screen_width, screen_height):
-        if self.x >= screen_width - self.radius:
-            # self.vx *= self.bounce
-            self.x = self.old_x
-            self.vx *= -1 * self.bounce
+        if self.x > screen_width - self.radius:
+            self.x = screen_width - self.radius
+            # self.x = self.old_x
+            self.vx *= -1 * self.bounce            
+        
             
-            # self.x *= bounce
-            
-        elif self.x <= self.radius:
-            # self.vx *= self.bounce
-            self.x = self.old_x
-            self.vx *= -1 * self.bounce
-            
-            # self.x *= bounce
+        elif self.x < self.radius:
+            self.x = self.radius
+            # self.x = self.old_x just in case
+            self.vx *= -1 * self.bounce            
+          
             
 
-        if self.y >= screen_height - self.radius:
-            # self.vy *= self.bounce
-            self.y = self.old_y
-            self.vy *= -1 * self.bounce
+        if self.y > screen_height - self.radius:
+            self.y = screen_height - self.radius
+            # self.y = self.old_y just in case
+            self.vy *= -1 * self.bounce            
+           
             
-            # self.y *= bounce
-            
-        elif self.y <= self.radius:
-            # self.vy *= self.bounce
-            self.y = self.old_y
-            self.vy *= -1 * self.bounce
-            
-            # self.y *= bounce
+        elif self.y < self.radius:
+            self.y = self.radius
+            # self.y = self.old_y just in case
+            self.vy *= -1 * self.bounce            
+           
             
 
 
@@ -123,7 +116,7 @@ class Obstacle():
 mouse_pos = None
 ball_clicked = False
 running = True
-ball = Ball(100, 100, 40, 47, 1, 10)
+ball = Ball(random.randint(10, 400), random.randint(10, 400), random.randint(0, 100), random.randint(0, 100), 0.98, 0.9, 10, gravity=4)
 # ball2 = Ball(200, 100, 10, 2, 0.99, 10)
 while running:
 
@@ -143,7 +136,6 @@ while running:
     ball.move()  
     ball.update_v() 
     
-    
 
     print(ball.vx, ball.vy, ball.x, ball.y, ball.old_x, ball.old_y, ball.radius, ball.color, ball.friction, ball.bounce)
 
@@ -159,16 +151,7 @@ while running:
     pygame.draw.circle(screen, ball.color, (ball.x, ball.y), ball.radius)
     # pygame.draw.circle(screen, ball2.color, (ball2.x, ball2.y), ball2.radius)
     ball.collision_line(screen)
-    # ball2.collision_line(screen)
-    
-
-
-    # if_clicked = if_clicked_on_ball(mouse_pos, mouse_click, pointA, 5)
-
-
-        # clicked = vel[1]
-
-        
+       
         
    # Flip the display
     pygame.display.flip()
