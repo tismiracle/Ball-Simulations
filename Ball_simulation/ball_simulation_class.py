@@ -1,5 +1,5 @@
 
-from math import radians
+from math import sqrt
 import pygame
 import random
 
@@ -79,33 +79,36 @@ class Ball():
     def check_if_out_of_borders(self, screen_width, screen_height):
         if self.x > screen_width - self.radius:
             self.x = screen_width - self.radius
-            # self.x = self.old_x
+            self.x = self.old_x
             self.vx *= -1 * self.bounce            
         
             
         elif self.x < self.radius:
             self.x = self.radius
-            # self.x = self.old_x just in case
+            self.x = self.old_x
             self.vx *= -1 * self.bounce            
           
             
 
         if self.y > screen_height - self.radius:
             self.y = screen_height - self.radius
-            # self.y = self.old_y just in case
+            self.y = self.old_y
             self.vy *= -1 * self.bounce            
            
             
         elif self.y < self.radius:
             self.y = self.radius
-            # self.y = self.old_y just in case
+            self.y = self.old_y
             self.vy *= -1 * self.bounce
 
     def highlight_ends(self, surf):
         pygame.draw.circle(surf, (255, 0, 255), (self.x + self.radius, self.y), 1)
         pygame.draw.circle(surf, (255, 0, 255), (self.x - self.radius, self.y), 1)
 
+
+    
     def collide(self, objects):
+        #C:\Users\rylko\Documents\Simulations\Simulations\Ball_simulation\obliczanie prędkości obiektów.jpg
         for obj in objects:
             if self.name == objects[obj].name:
                 continue
@@ -114,11 +117,18 @@ class Ball():
                 if self.x + self.radius >= objects[obj].x - objects[obj].radius and self.x - self.radius <= objects[obj].x + objects[obj].radius:
                     if self.y + self.radius >= objects[obj].y - objects[obj].radius and self.y - self.radius <= objects[obj].y + objects[obj].radius:
                         print("collision")
-                        #gdy wektory są zwrócone w tą samą stronę                       
-                        
-                        self.x = self.old_x                        
-                        self.vx *= self.bounce
-                        objects[obj].vx += self.vx
+                        print(self.vx, self.vy)
+                        [print(objects[obj].vx, objects[obj].vy)]
+                        # if (self.vx >= 0 and objects[obj].vx >= 0) or (self.vx <= 0 and objects[obj].vx <= 0):     
+                        self.x = self.old_x
+                        objects[obj].x = objects[obj].old_x
+
+                        new_vx_self = (2 * objects[obj].vx)/2 #without counting mass. If you want to add mass to the objects you'll need to rewrite the formula
+                        new_vx_obj = (2 * self.vx)/2 #without counting mass. If you want to add mass to the objects you'll need to rewrite the formula
+                        self.vx = new_vx_self
+                        objects[obj].vx = new_vx_obj
+
+                    
                         
                                 
            
@@ -130,19 +140,19 @@ running = True
 
 balls = {}
 
-ball1 = Ball(random.randint(10, 400), random.randint(10, 400), random.randint(0, 100), random.randint(0, 100), 0.98, 0.9, 10, "ball1", gravity=4, color=(random.randint(1,254), random.randint(1,254), random.randint(1,254)))
+# ball1 = Ball(22, random.randint(10, 400), 0, 0, 0.98, 0.9, 10, "ball1", gravity=4, color=(random.randint(1,254), random.randint(1,254), random.randint(1,254)))
 # ball1 = Ball(200, 200, 0, 0, 1, 1, 10, "ball1", gravity=0)
-balls[ball1.name] = ball1
+# balls[ball1.name] = ball1
 
-ball2 = Ball(random.randint(10, 400), random.randint(10, 400), random.randint(0, 100), random.randint(0, 100), 0.98, 0.9, 10, "ball2", gravity=4, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
+# ball2 = Ball(10, random.randint(10, 400), 0, 0, 0.98, 0.9, 10, "ball2", gravity=4, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
 # ball2 = Ball(100, 100, 0, 0, 1, 1, 10, "ball2", gravity=0)
-balls[ball2.name] = ball2
+# balls[ball2.name] = ball2
 
-ball3 = Ball(random.randint(10, 400), random.randint(10, 400), random.randint(0, 100), random.randint(0, 100), 0.98, 0.9, 10, "ball3", gravity=4, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
+ball3 = Ball(20, 490, 30, 0, 0.98, 0.9, 10, "ball3", gravity=4, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
 # ball2 = Ball(100, 100, 0, 0, 1, 1, 10, "ball2", gravity=0)
 balls[ball3.name] = ball3
 
-ball4 = Ball(random.randint(10, 400), random.randint(10, 400), random.randint(0, 100), random.randint(0, 100), 0.98, 0.9, 10, "ball4", gravity=4, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
+ball4 = Ball(160, 490, 15, 0, 0.98, 0.9, 10, "ball4", gravity=4, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
 # ball2 = Ball(100, 100, 0, 0, 1, 1, 10, "ball2", gravity=0)
 balls[ball4.name] = ball4
 
