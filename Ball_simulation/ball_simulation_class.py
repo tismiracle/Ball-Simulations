@@ -113,9 +113,11 @@ class Ball():
             if self.name == objects[obj].name:
                 continue
             else:
-                #check if collide on both axis
-                if self.x + self.radius >= objects[obj].x - objects[obj].radius and self.x - self.radius <= objects[obj].x + objects[obj].radius:
-                    if self.y + self.radius >= objects[obj].y - objects[obj].radius and self.y - self.radius <= objects[obj].y + objects[obj].radius:
+                #different collision algorythm 
+                dist = sqrt((self.x - objects[obj].x)**2 + (self.y - objects[obj].y))
+                sum_of_radii = self.radius + objects[obj].radius
+
+                if dist <= sum_of_radii:
                         print("collision")
                         print(self.vx, self.vy)
                         [print(objects[obj].vx, objects[obj].vy)]
@@ -140,21 +142,21 @@ running = True
 
 balls = {}
 
-# ball1 = Ball(22, random.randint(10, 400), 0, 0, 0.98, 0.9, 10, "ball1", gravity=4, color=(random.randint(1,254), random.randint(1,254), random.randint(1,254)))
+ball1 = Ball(random.randint(10, 400), random.randint(10, 400), random.randint(10, 40), random.randint(10, 40), 0.98, 0.9, 10, "ball1", gravity=4, color=(random.randint(1,254), random.randint(1,254), random.randint(1,254)))
 # ball1 = Ball(200, 200, 0, 0, 1, 1, 10, "ball1", gravity=0)
-# balls[ball1.name] = ball1
+balls[ball1.name] = ball1
 
-# ball2 = Ball(10, random.randint(10, 400), 0, 0, 0.98, 0.9, 10, "ball2", gravity=4, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
+ball2 = Ball(random.randint(10, 400), random.randint(10, 400), random.randint(10, 40), random.randint(10, 40), 0.98, 0.9, 10, "ball2", gravity=4, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
 # ball2 = Ball(100, 100, 0, 0, 1, 1, 10, "ball2", gravity=0)
-# balls[ball2.name] = ball2
+balls[ball2.name] = ball2
 
-ball3 = Ball(20, 490, 30, 0, 0.98, 0.9, 10, "ball3", gravity=4, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
+# ball3 = Ball(20, 490, 30, 0, 0.98, 0.9, 10, "ball3", gravity=4, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
 # ball2 = Ball(100, 100, 0, 0, 1, 1, 10, "ball2", gravity=0)
-balls[ball3.name] = ball3
+# balls[ball3.name] = ball3
 
-ball4 = Ball(160, 490, 15, 0, 0.98, 0.9, 10, "ball4", gravity=4, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
+# ball4 = Ball(160, 490, 15, 0, 0.98, 0.9, 10, "ball4", gravity=4, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
 # ball2 = Ball(100, 100, 0, 0, 1, 1, 10, "ball2", gravity=0)
-balls[ball4.name] = ball4
+# balls[ball4.name] = ball4
 
 
 
