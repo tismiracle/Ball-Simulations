@@ -1,5 +1,5 @@
 
-from math import sqrt
+from math import sqrt, asin, acos
 import pygame
 import random
 
@@ -114,24 +114,43 @@ class Ball():
                 continue
             else:
                 #different collision algorythm 
-                dist = sqrt((self.x - objects[obj].x)**2 + (self.y - objects[obj].y))
+                dist = sqrt((self.x - objects[obj].x)**2 + (self.y - objects[obj].y)**2)
                 sum_of_radii = self.radius + objects[obj].radius
 
                 if dist <= sum_of_radii:
                         print("collision")
                         print(self.vx, self.vy)
                         [print(objects[obj].vx, objects[obj].vy)]
-                        # if (self.vx >= 0 and objects[obj].vx >= 0) or (self.vx <= 0 and objects[obj].vx <= 0):     
+
+                        # angle = asin()
+
+                        #check only for X axis
                         self.x = self.old_x
                         objects[obj].x = objects[obj].old_x
+                        # old_vx = self.vx
+                        # old_vy = self.vy
+                        # old_obj_vx = objects[obj].vx
+                        # old_obj_vy = objects[obj].vy
 
                         new_vx_self = (2 * objects[obj].vx)/2 #without counting mass. If you want to add mass to the objects you'll need to rewrite the formula
                         new_vx_obj = (2 * self.vx)/2 #without counting mass. If you want to add mass to the objects you'll need to rewrite the formula
+
+
+
                         self.vx = new_vx_self
                         objects[obj].vx = new_vx_obj
+                        # self.vy = new_vy_self
+                        # objects[obj].vy = new_vy_obj
 
-                    
-                        
+                        #check for Y axis
+                        # self.y = self.old_y
+                        # objects[obj].y = objects[obj].old_y
+
+                        # new_vy_self = (2 * objects[obj].vy)/2 #without counting mass. If you want to add mass to the objects you'll need to rewrite the formula
+                        # new_vy_obj = (2 * self.vy)/2 #without counting mass. If you want to add mass to the objects you'll need to rewrite the formula
+                        # self.vy = new_vy_self
+                        # objects[obj].vy = new_vy_obj
+                            
                                 
            
             
@@ -142,21 +161,31 @@ running = True
 
 balls = {}
 
-ball1 = Ball(random.randint(10, 400), random.randint(10, 400), random.randint(10, 40), random.randint(10, 40), 0.98, 0.9, 10, "ball1", gravity=4, color=(random.randint(1,254), random.randint(1,254), random.randint(1,254)))
-# ball1 = Ball(200, 200, 0, 0, 1, 1, 10, "ball1", gravity=0)
-balls[ball1.name] = ball1
+#random forces on X and Y axis
+# ball1 = Ball(random.randint(10, 400), random.randint(10, 400), random.randint(10, 40), random.randint(10, 40), 0.98, 0.9, 30, "ball1", gravity=0, color=(random.randint(1,254), random.randint(1,254), random.randint(1,254)))
 
-ball2 = Ball(random.randint(10, 400), random.randint(10, 400), random.randint(10, 40), random.randint(10, 40), 0.98, 0.9, 10, "ball2", gravity=4, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
-# ball2 = Ball(100, 100, 0, 0, 1, 1, 10, "ball2", gravity=0)
-balls[ball2.name] = ball2
+# balls[ball1.name] = ball1
 
-# ball3 = Ball(20, 490, 30, 0, 0.98, 0.9, 10, "ball3", gravity=4, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
-# ball2 = Ball(100, 100, 0, 0, 1, 1, 10, "ball2", gravity=0)
-# balls[ball3.name] = ball3
+# ball2 = Ball(random.randint(10, 400), random.randint(10, 400), random.randint(10, 40), random.randint(10, 40), 0.98, 0.9, 30, "ball2", gravity=0, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
 
-# ball4 = Ball(160, 490, 15, 0, 0.98, 0.9, 10, "ball4", gravity=4, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
-# ball2 = Ball(100, 100, 0, 0, 1, 1, 10, "ball2", gravity=0)
-# balls[ball4.name] = ball4
+# balls[ball2.name] = ball2
+
+
+#only on X axis
+ball3 = Ball(100, 320, random.randint(10, 40), 0, 0.98, 0.9, 30, "ball3", gravity=0, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
+
+balls[ball3.name] = ball3
+
+ball4 = Ball(300, 300, 0, 0, 0.98, 0.9, 30, "ball4", gravity=0, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
+
+balls[ball4.name] = ball4
+
+#only on Y axis
+# ball5 = Ball(180, 250, 0, 30, 0.98, 0.9, 30, "ball5", gravity=0, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
+# balls[ball5.name] = ball5
+
+# ball6 = Ball(160, 300, 0, 0, 0.98, 0.9, 30, "ball6", gravity=0, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
+# balls[ball6.name] = ball6
 
 
 
