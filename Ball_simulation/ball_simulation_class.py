@@ -109,8 +109,8 @@ class Ball():
 
     
     def collide(self, objects):
-        
         #C:\Users\rylko\Documents\Simulations\Simulations\Ball_simulation\obliczanie prędkości obiektów.jpg
+        
         for obj in objects:
             if self.name == objects[obj].name:
                 continue
