@@ -11,7 +11,7 @@ screen_height = 500
 
 
 pygame.init()
-FPS = 50 # frames per second setting
+FPS = 60 # frames per second setting
 fpsClock = pygame.time.Clock()
 screen = pygame.display.set_mode([screen_width, screen_height])
 
@@ -77,6 +77,7 @@ class Ball():
         pygame.draw.line(surf, (243,23,23), (self.x, self.y), (self.x + self.vx, self.y + self.vy), 3)
 
     def check_if_out_of_borders(self, screen_width, screen_height):
+        #rewrite it to fit the physics collisions
         if self.x > screen_width - self.radius:
             self.x = screen_width - self.radius
             self.x = self.old_x
@@ -109,6 +110,7 @@ class Ball():
     
     def collide(self, objects):
         #C:\Users\rylko\Documents\Simulations\Simulations\Ball_simulation\obliczanie prędkości obiektów.jpg
+        
         for obj in objects:
             if self.name == objects[obj].name:
                 continue
@@ -126,30 +128,39 @@ class Ball():
 
                         #check only for X axis
                         self.x = self.old_x
-                        objects[obj].x = objects[obj].old_x
+                        # objects[obj].x = objects[obj].old_x
                         # old_vx = self.vx
                         # old_vy = self.vy
                         # old_obj_vx = objects[obj].vx
                         # old_obj_vy = objects[obj].vy
 
-                        new_vx_self = (2 * objects[obj].vx)/2 #without counting mass. If you want to add mass to the objects you'll need to rewrite the formula
-                        new_vx_obj = (2 * self.vx)/2 #without counting mass. If you want to add mass to the objects you'll need to rewrite the formula
+                        distance = sqrt((self.x - objects[obj].x)**2 + (self.y - objects[obj].y)**2)
 
+                        #normal
+                        normalized_x = (objects[obj].x - self.x) / distance
+                        normalized_y = (objects[obj].y - self.y) / distance 
 
+                        #tangent
+                        tan_x = -normalized_y
+                        tan_y = normalized_x
 
-                        self.vx = new_vx_self
-                        objects[obj].vx = new_vx_obj
-                        # self.vy = new_vy_self
-                        # objects[obj].vy = new_vy_obj
+                        #dot product tangent
+                        dpTan1 = self.vx * tan_x + self.vy * tan_y
+                        dpTan2 = objects[obj].vx * tan_x + objects[obj].vy * tan_y
 
-                        #check for Y axis
-                        # self.y = self.old_y
-                        # objects[obj].y = objects[obj].old_y
+                        #dot product normal
+                        dpNorm1 = self.vx * normalized_x + self.vy * normalized_y
+                        dpNorm2 = objects[obj].vx * normalized_x + objects[obj].vy * normalized_y
 
-                        # new_vy_self = (2 * objects[obj].vy)/2 #without counting mass. If you want to add mass to the objects you'll need to rewrite the formula
-                        # new_vy_obj = (2 * self.vy)/2 #without counting mass. If you want to add mass to the objects you'll need to rewrite the formula
-                        # self.vy = new_vy_self
-                        # objects[obj].vy = new_vy_obj
+                        #conservation of momentum
+                        momentum1 = (dpNorm1 * (1 - 1) + 2 * 1 * dpNorm2) / (1 + 1)
+                        momentum2 = (dpNorm2 * (1 - 1) + 2 * 1 * dpNorm1) / (1 + 1)
+
+                        #update ball velocities
+                        self.vx = tan_x * dpTan1 + normalized_x * momentum1
+                        self.vy = tan_y * dpTan1 + normalized_y * momentum1
+                        objects[obj].vx = tan_x * dpTan2 + normalized_x * momentum2
+                        objects[obj].vy = tan_y * dpTan2 + normalized_y * momentum2
                             
                                 
            
@@ -162,29 +173,29 @@ running = True
 balls = {}
 
 #random forces on X and Y axis
-# ball1 = Ball(random.randint(10, 400), random.randint(10, 400), random.randint(10, 40), random.randint(10, 40), 0.98, 0.9, 30, "ball1", gravity=0, color=(random.randint(1,254), random.randint(1,254), random.randint(1,254)))
+ball1 = Ball(random.randint(10, 400), random.randint(10, 400), random.randint(10, 40), random.randint(10, 40), 0.98, 0.9, 30, "ball1", gravity=0, color=(random.randint(1,254), random.randint(1,254), random.randint(1,254)))
 
-# balls[ball1.name] = ball1
+balls[ball1.name] = ball1
 
-# ball2 = Ball(random.randint(10, 400), random.randint(10, 400), random.randint(10, 40), random.randint(10, 40), 0.98, 0.9, 30, "ball2", gravity=0, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
+ball2 = Ball(random.randint(10, 400), random.randint(10, 400), random.randint(10, 40), random.randint(10, 40), 0.98, 0.9, 30, "ball2", gravity=0, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
 
-# balls[ball2.name] = ball2
+balls[ball2.name] = ball2
 
 
 #only on X axis
-ball3 = Ball(100, 320, random.randint(10, 40), 0, 0.98, 0.9, 30, "ball3", gravity=0, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
+# ball3 = Ball(100, 320, random.randint(10, 40), 0, 0.98, 0.9, 30, "ball3", gravity=0, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
 
-balls[ball3.name] = ball3
+# balls[ball3.name] = ball3
 
-ball4 = Ball(300, 300, 0, 0, 0.98, 0.9, 30, "ball4", gravity=0, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
+# ball4 = Ball(300, 300, 0, 0, 0.98, 0.9, 30, "ball4", gravity=0, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
 
-balls[ball4.name] = ball4
+# balls[ball4.name] = ball4
 
 #only on Y axis
-# ball5 = Ball(180, 250, 0, 30, 0.98, 0.9, 30, "ball5", gravity=0, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
+# ball5 = Ball(161, 30, 0, 30, 0.98, 0.9, 30, "ball5", gravity=5, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
 # balls[ball5.name] = ball5
 
-# ball6 = Ball(160, 300, 0, 0, 0.98, 0.9, 30, "ball6", gravity=0, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
+# ball6 = Ball(160, 600, 0, 0, 0.98, 0.9, 30, "ball6", gravity=5, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
 # balls[ball6.name] = ball6
 
 
