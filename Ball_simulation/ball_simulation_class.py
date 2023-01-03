@@ -1,5 +1,5 @@
 
-from math import sqrt, asin, acos
+from math import sqrt, asin, acos, cos, sin, tan, atan
 import pygame
 import random
 
@@ -78,29 +78,25 @@ class Ball():
 
     def check_if_out_of_borders(self, screen_width, screen_height):
         #rewrite it to fit the physics collisions
-        if self.x > screen_width - self.radius:
-            self.x = screen_width - self.radius
-            self.x = self.old_x
-            self.vx *= -1 * self.bounce            
-        
+        if self.x >= screen_width - self.radius:
+            # self.x = screen_width - self.radius
+            self.x = self.old_x         
+            self.vx *= -1 * self.bounce                 
             
-        elif self.x < self.radius:
-            self.x = self.radius
+        elif self.x <= self.radius:
             self.x = self.old_x
-            self.vx *= -1 * self.bounce            
-          
-            
+            self.vx *= -1 * self.bounce
 
-        if self.y > screen_height - self.radius:
-            self.y = screen_height - self.radius
-            self.y = self.old_y
-            self.vy *= -1 * self.bounce            
-           
+        if self.y >= screen_height - self.radius:
+            self.y = self.old_y            
+            self.vy *= -1 * self.bounce    
+
             
-        elif self.y < self.radius:
-            self.y = self.radius
-            self.y = self.old_y
+        elif self.y <= self.radius:
+            self.y = self.old_y   
             self.vy *= -1 * self.bounce
+
+
 
     def highlight_ends(self, surf):
         pygame.draw.circle(surf, (255, 0, 255), (self.x + self.radius, self.y), 1)
@@ -128,11 +124,10 @@ class Ball():
 
                         #check only for X axis
                         self.x = self.old_x
-                        # objects[obj].x = objects[obj].old_x
-                        # old_vx = self.vx
-                        # old_vy = self.vy
-                        # old_obj_vx = objects[obj].vx
-                        # old_obj_vy = objects[obj].vy
+                        self.y = self.old_y
+                        objects[obj].x = objects[obj].old_x
+                        objects[obj].y = objects[obj].old_y
+
 
                         distance = sqrt((self.x - objects[obj].x)**2 + (self.y - objects[obj].y)**2)
 
@@ -173,14 +168,18 @@ running = True
 balls = {}
 
 #random forces on X and Y axis
-ball1 = Ball(random.randint(10, 400), random.randint(10, 400), random.randint(10, 40), random.randint(10, 40), 0.98, 0.9, 30, "ball1", gravity=0, color=(random.randint(1,254), random.randint(1,254), random.randint(1,254)))
+# ball1 = Ball(random.randint(30, 400), random.randint(10, 400), random.randint(-70, 70), random.randint(-70, 70), 0.98, 0.9, 30, "ball1", gravity=3, color=(random.randint(1,254), random.randint(1,254), random.randint(1,254)))
 
-balls[ball1.name] = ball1
+# balls[ball1.name] = ball1
 
-ball2 = Ball(random.randint(10, 400), random.randint(10, 400), random.randint(10, 40), random.randint(10, 40), 0.98, 0.9, 30, "ball2", gravity=0, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
+# ball2 = Ball(random.randint(30, 400), random.randint(10, 400), random.randint(-70, 70), random.randint(-70, 70), 0.98, 0.9, 30, "ball2", gravity=3, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
 
-balls[ball2.name] = ball2
+# balls[ball2.name] = ball2
 
+for i in range(3, 15):
+    ball = Ball(random.randint(30, 400), random.randint(10, 400), random.randint(-10, 10), random.randint(-10, 10), 0.98, 0.80, 30, f"ball{i}", gravity=3, color=(random.randint(1,254), random.randint(1,254), random.randint(1,254)))
+
+    balls[ball.name] = ball
 
 #only on X axis
 # ball3 = Ball(100, 320, random.randint(10, 40), 0, 0.98, 0.9, 30, "ball3", gravity=0, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
@@ -192,10 +191,10 @@ balls[ball2.name] = ball2
 # balls[ball4.name] = ball4
 
 #only on Y axis
-# ball5 = Ball(161, 30, 0, 30, 0.98, 0.9, 30, "ball5", gravity=5, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
+# ball5 = Ball(161, 30, 0, 30, 0.98, 0.9, 30, "ball5", gravity=4, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
 # balls[ball5.name] = ball5
 
-# ball6 = Ball(160, 600, 0, 0, 0.98, 0.9, 30, "ball6", gravity=5, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
+# ball6 = Ball(160, 300, 0, 0, 0.98, 0.9, 30, "ball6", gravity=4, color=(random.randint(1,254),random.randint(1,254),random.randint(1,254)))
 # balls[ball6.name] = ball6
 
 
