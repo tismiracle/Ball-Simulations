@@ -156,10 +156,6 @@ class Ball():
                         self.vy = tan_y * dpTan1 + normalized_y * momentum1
                         objects[obj].vx = tan_x * dpTan2 + normalized_x * momentum2
                         objects[obj].vy = tan_y * dpTan2 + normalized_y * momentum2
-                            
-                                
-           
-            
 
 mouse_pos = None
 ball_clicked = False
@@ -176,7 +172,7 @@ balls = {}
 
 # balls[ball2.name] = ball2
 
-for i in range(3, 15):
+for i in range(3, 9):
     ball = Ball(random.randint(30, 400), random.randint(10, 400), random.randint(-10, 10), random.randint(-10, 10), 0.98, 0.80, 30, f"ball{i}", gravity=3, color=(random.randint(1,254), random.randint(1,254), random.randint(1,254)))
 
     balls[ball.name] = ball
